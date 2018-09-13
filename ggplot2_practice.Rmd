@@ -1,0 +1,159 @@
+---
+title: '`ggplot2`Practice'
+author: "Shannon Ellis"
+date: "9/11/2018"
+output: html_document
+---
+
+The goal of this document is to help get more comfortable plotting data using the `ggplot2` package.
+
+### `ggplot2` review
+
+Very briefly, the general format for making a plot using `ggplot2` is as follows:
+
+```
+ggplot(df, aes())
+ + geom()
+```
+
+In this:
+
+* `df` : represents the dataframe you want to plot
+* `aes` : includes the mappings you'll use to generate teh plot
+* `geom` : represents what `geom` you want to use (or, in other words, what *type* of plot you want to make)
+
+For more detailed information about making plots using `ggplot2`, refer back to the Data Visualization Leanpub course.
+
+### Install & Load `ggplot2`
+
+To complete these exercises, you'll first have to make sure `ggplot2` is installed and loaded in.
+
+```{r load-package}
+## Install and load the ggplot2 package
+install.packages("ggplot2")
+install.packages("dplyr")
+library(ggplot2)
+library(dplyr)
+```
+
+### The Datasets
+
+In these exercies we'll be using two datasets: `mtcars` and `msleep`.
+
+You'll want to be sure you know what variables are available in each dataset. As before, use the functions `glimpse()` and `View()` to get reacquainted with both the `mtcars` and the `msleep` dataset. 
+
+```{r view-data}
+## Get acquainted with the dataset
+glimpse(msleep)
+glimpse(mtcars)
+View(msleep)
+View(mtcars)
+```
+
+### Histogram
+
+Histograms are helpful for visualizing the *distribution* of a single numeric variable.
+
+Choose a numeric (continuous) variable from the `mtcars` dataset and visualize the distribution of that variable using a histogram.
+
+```{r histogram-mtcars}
+## Include code for a histogram 
+## for a single numeric variable in mtcars
+ggplot(mtcars, aes(disp)) +
+  geom_histogram()
+```
+
+Do the same for the `msleep` dataset. Choose a numeric (continuous) variable from the `msleep` dataset and visualize the distribution of that variable using a histogram.
+
+```{r histogram-msleep}
+## Include code for a histogram 
+## for a single numeric variable in msleep
+ggplot(msleep, aes(sleep_rem)) +
+  geom_histogram()
+```
+
+### Scatterplot
+
+Scatterplots are helpful for visualizing the relationship between two numeric variables. 
+
+Choose two numeric (continuous) variables from the `mtcars` dataset and visualize the relationship between the two variables using a scatterplot
+
+```{r scatterplot-mtcars}
+## Include code for a scatterplot 
+## for two numeric variables in mtcars
+ggplot(mtcars, aes(mpg, cyl)) +
+  geom_point()
+```
+
+Now, do the same for two numeric (continuous) variables from the `msleep` dataset. Vsualize the relationship between the two variables using a scatterplot.
+
+```{r scatterplot-msleep}
+## Include code for a scatterplot 
+## for two numeric variables in msleep
+ggplot(msleep, aes(sleep_total, sleep_rem)) +
+  geom_point()
+```
+
+
+### Bar Charts
+
+So far we've only been working with numeric variables, but it's important to be able to visualize categorical (factors) type data as well.
+
+Bar charts are helpful for visualizing the number of observations in each level of a categorical variable.
+
+Choose a categorical (factor) variable from the `mtcars` dataset and visualize the number within each level of the variable using a bar chart. 
+
+(Note that sometimes categorical variables can look like a numeric variable, such as the number of cylinders a car has. However, it's a factor because there are only a few different options for how many cylinders a car can have.)
+
+```{r bar-chart-mtcars}
+## Include code for a barchart 
+## for a categorical variable in mtcars
+mtcars$vs <- as.factor(mtcars$vs)
+ggplot(mtcars, aes(vs)) +
+  geom_bar()
+```
+
+Do the same for the `msleep` dataset. Choose a categorical (factor) variable from the `mslee[` dataset and visualize the number within each level of the variable using a bar chart. 
+
+```{r bar-chart-msleep}
+## Include code for a barchart 
+## for a categorical variable in sleep
+msleep$vore <- as.factor(msleep$vore)
+ggplot(msleep, aes(vore)) +
+  geom_bar()
+```
+
+### Piping & `ggplot2`
+
+Now, let's combine this with what you did in the piping practice lesson!
+
+First, copy the code from the following two chunks (`pipe-carnivores` and `pipe-big-cars`) from the piping practice.
+
+After adding the code from the piping exercise, create a scatterplot taking the output from the piping_practice code and piping it into the code that will generate a `ggplot2` scatterplot.
+
+Use the same numeric variables you used above above for your scatterplots.
+
+Compare the output from your scatterplots above to these plots. What has changed?
+
+```{r pipe-carnivores}
+## copy code from piping_practice
+## pipe this code into code that will create
+## a ggplot2 scatterplot
+msleep %>%
+  filter(order == "Carnivora") %>%
+  arrange(sleep_rem, sleep_total) %>%
+  ggplot(aes(sleep_total, sleep_rem)) +
+  geom_point()
+```
+
+
+```{r pipe-big-cars}
+## copy code from piping_practice
+## pipe this code into code that will create
+## a ggplot2 scatterplot
+mtcars %>%
+  filter(cyl == 4) %>%
+  arrange(wt) %>%
+  ggplot(aes(mpg, cyl)) +
+  geom_point()
+```
